@@ -1,2 +1,8 @@
+[web_servers]
 ubuntu1@192.168.1.241
+
+[db_servers]
 ubuntu2@192.168.1.30
+
+[file_servers]
+ubuntu3@192.168.1.214

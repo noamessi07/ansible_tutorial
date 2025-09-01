@@ -2,14 +2,41 @@
 
 - hosts: all
   become: true
-  tasks:
+  pre_tasks:
 
-  - name: install updates (Ubuntu)
+  - name: updates repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh key for simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICf89W2ZNpD1sC9QSzAM0XzyfGhH1DBCCnDAFfi+x9WQ Ansible"
+
+- hosts: homeLab
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
 
 - hosts: web_servers
   become: true
